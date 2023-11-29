@@ -37,7 +37,7 @@ const char *HTML_CONTENT = R""""(
         </style>
     </head>
     <body>
-        <p style="text-align: center; font-size: 2.75em;">You Window is OPEN_HOLDER</p>
+        <p style="text-align: center; font-size: 2.75em;">Your Window is OPEN_HOLDER</p>
 
         <div class="split left">
             <div class="centered">

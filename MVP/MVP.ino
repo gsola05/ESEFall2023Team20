@@ -1,8 +1,7 @@
-#include <Servo.h>
+#include <AccelStepper.h>
 #include <DHT.h>
 #include <LiquidCrystal.h>
-#include <Stepper.h>
-#include <WiFiS3.h> // http://10.103.201.189/
+#include <WiFiS3.h> // 10.103.207.4
 #include "index.h"
 
 #define DHTPIN 13
@@ -25,8 +24,17 @@ const int rs = 12, en = 10, d4 = 9, d5 = 4, d6 = 3, d7 = 2;
 LiquidCrystal lcd(rs, en, d4, d5, d6, d7);
 
 // Stepper Constants
+#define HALFSTEP 8
+
+#define motorPin1  8     //  Blue   on 28BYJ-48
+#define motorPin2  7     //  Pink   on 28BYJ-48
+#define motorPin3  11    //  Yellow on 28BYJ-48
+#define motorPin4  1     //  Orange on 28BYJ-48
+
+int currentPos;        // Move this many steps - 2048 = 1 turn
+
+AccelStepper stepper(HALFSTEP, motorPin1, motorPin3, motorPin2, motorPin4);
 // 2048 steps == 1 Revolution
-Stepper myStepper = Stepper(2048, 7, 11, 8, 1);
 
 bool open = false;
 
@@ -48,7 +56,9 @@ void setup() {
 
   lcd.begin(16, 2);
 
-  myStepper.setSpeed(5);
+  stepper.setMaxSpeed(10000);
+  stepper.setAcceleration(256);
+  stepper.setSpeed(512);
 
   // be up to date
   String fv = WiFi.firmwareVersion();
@@ -80,7 +90,7 @@ void loop() {
   // "Physcial" Things We Do
   sendToLCD(temp, humid);
   moveWindow(temp,humid);
-
+  stepper.run();
 
   // Show everything on the website
   // listen for incoming clients
@@ -173,15 +183,16 @@ void sendToLCD(float t, float h) {
 }
 
 void moveWindow(float t, float h) {
-    if (t > 28.0 || h > 50.0) { // Close the Window
-      if (getDist() > winThresh) { // Window too far come back 
-        Serial.println("Too Far!");
-        myStepper.step(256);
-      }
+  if (t > 28.0 || h > 50.0) { // Close the Window
+    if (getDist() > winThresh) { // Window too far come back 
+      Serial.println("Too Far!");
+      stepper.move(256);
+    }
   } else { // Open the Window
-      if (getDist() < winThresh) { // Window too close go away 
-        Serial.println("Too Close!");
-        myStepper.step(256);
-      }
+    if (getDist() < winThresh) { // Window too close go away 
+      Serial.println("Too Close!");
+      stepper.move(-256);
+    }
   }
+  stepper.run();
 }
