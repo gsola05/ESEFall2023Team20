@@ -1,10 +1,9 @@
 #include <AccelStepper.h>
 #include <DHT.h>
-#include <LiquidCrystal.h>
 #include <WiFiS3.h> // 10.103.207.4
 #include "index.h"
 
-#define DHTPIN 13
+#define DHTPIN 11
 
 // Ultrasonic Constants
 const int trigPin = 6;
@@ -19,17 +18,13 @@ DHT dht(DHTPIN, DHT11);
 float h;
 float t;
 
-// LCD constants
-const int rs = 12, en = 10, d4 = 9, d5 = 4, d6 = 3, d7 = 2;
-LiquidCrystal lcd(rs, en, d4, d5, d6, d7);
-
 // Stepper Constants
 #define HALFSTEP 8
 
 #define motorPin1  8     //  Blue   on 28BYJ-48
 #define motorPin2  7     //  Pink   on 28BYJ-48
-#define motorPin3  11    //  Yellow on 28BYJ-48
-#define motorPin4  1     //  Orange on 28BYJ-48
+#define motorPin3  10    //  Yellow on 28BYJ-48
+#define motorPin4  9     //  Orange on 28BYJ-48
 
 int currentPos;        // Move this many steps - 2048 = 1 turn
 
@@ -54,11 +49,9 @@ void setup() {
   pinMode(trigPin, OUTPUT);
   pinMode(echoPin, INPUT);
 
-  lcd.begin(16, 2);
-
-  stepper.setMaxSpeed(10000);
-  stepper.setAcceleration(256);
-  stepper.setSpeed(512);
+  stepper.setMaxSpeed(20000);
+  stepper.setAcceleration(20000);
+  stepper.setSpeed(14000);
 
   // be up to date
   String fv = WiFi.firmwareVersion();
@@ -88,7 +81,6 @@ void loop() {
   float humid = getHum();
 
   // "Physcial" Things We Do
-  sendToLCD(temp, humid);
   moveWindow(temp,humid);
   stepper.run();
 
@@ -172,15 +164,6 @@ float getDist() {
   return duration*0.034/2; // Returns in cm
 }
 
-void sendToLCD(float t, float h) {
-  lcd.setCursor(0,0); 
-  lcd.print("Temp: ");
-  lcd.print(t);
-  
-  lcd.setCursor(0,1);
-  lcd.print("Humidity: ");
-  lcd.print(h);
-}
 
 void moveWindow(float t, float h) {
   if (t > 28.0 || h > 50.0) { // Close the Window
