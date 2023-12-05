@@ -37,14 +37,18 @@
     </head>
     <body>
         <div id = "sample"></div>
+        <div id = "humid"></div>
 
         <script>
             var socket = io();
 
-            socket.on("data", function(data) {
-                console.log(data);
-
-                document.getElementById("sample").innerHTML = data;
+            socket.on("temp", function(temp) {
+                console.log(temp);
+                document.getElementById("sample").innerHTML = temp;
+            });
+            socket.on("humid", function(humid) {
+                console.log(humid);
+                document.getElementById("humid").innerHTML = humid;
             });
         </script>
 

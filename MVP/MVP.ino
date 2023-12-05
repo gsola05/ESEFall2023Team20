@@ -52,8 +52,7 @@ void loop() {
 
   float temp = getTemp();
   float humid = getHum();
-  Serial.println(temp);
-  Serial.println(humid);
+  Serial.println(String(temp) + "," + String(humid));
 
   // "Physcial" Things We Do
   moveWindow(temp, humid);

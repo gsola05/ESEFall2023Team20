@@ -1,3 +1,4 @@
+
 var http = require("http");
 var fs = require('fs');
 
@@ -33,8 +34,11 @@ io.on('connection', function(data) {
 })
 
 parser.on('data', function(data) {
-  console.log(data);  
-  io.emit('data', data);
+  var dataArr = data.split(",");
+  var temp = dataArr[0];
+  var humid = dataArr[1]; 
+  io.emit('temp', temp); 
+  io.emit('humid', humid); 
 });
 
 app.listen(3000);
