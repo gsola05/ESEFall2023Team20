@@ -36,19 +36,28 @@
         </style>
     </head>
     <body>
-        <div id = "sample"></div>
-        <div id = "humid"></div>
+        <div class="split left">
+            <div class="centered">
+                <p style="font-size: 1.25em;" id = "temp"><div class="split left">
+                </div> </p>
+            </div>
+        </div>
+        <div class="split right">
+            <div class="centered">
+                <p style="font-size: 1.25em;" id = "humid"></p>
+            </div>
+        </div>
 
         <script>
             var socket = io();
 
             socket.on("temp", function(temp) {
                 console.log(temp);
-                document.getElementById("sample").innerHTML = temp;
+                document.getElementById("temp").innerHTML = "The current temperature is " + temp + " C";
             });
             socket.on("humid", function(humid) {
                 console.log(humid);
-                document.getElementById("humid").innerHTML = humid;
+                document.getElementById("humid").innerHTML = "The current humidity is " + humid + "%";
             });
         </script>
 
