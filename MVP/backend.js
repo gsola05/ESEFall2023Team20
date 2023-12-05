@@ -5,9 +5,9 @@ var index = fs.readFileSync('index.html');
 
 
 var SerialPort = require('serialport');
+const Readline = require('@serialport/parser-readline');
 
-const parsers = SerialPort.parsers;
-const parser = new parsers.ReadLine({
+const parser = new Readline({
   delimeter: '\r\n'
 })
 
@@ -33,7 +33,7 @@ io.on('connection', function(data) {
 })
 
 parser.on('data', function(data) {
-  console.log(data);
+  console.log(data);  
   io.emit('data', data);
 });
 

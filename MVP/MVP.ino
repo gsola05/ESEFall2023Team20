@@ -51,8 +51,8 @@ void setup() {
 void loop() {
 
   float temp = getTemp();
-  int humid = round(getHum());
-  Serial.println(getDist());
+  float humid = getHum();
+  Serial.println(temp);
   Serial.println(humid);
 
   // "Physcial" Things We Do
