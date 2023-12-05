@@ -4,7 +4,7 @@
 #include <Stepper.h>
 #include <WiFiS3.h> // http://10.103.201.189/
 
-#define DHTPIN 13
+#define DHTPIN 11
 
 // Ultrasonic Constants
 const int trigPin = 6;
@@ -45,19 +45,19 @@ void setup() {
   pinMode(trigPin, OUTPUT);
   pinMode(echoPin, INPUT);
 
-  lcd.begin(16, 2);
-
   myStepper.setSpeed(5);
 }
 
 void loop() {
 
   float temp = getTemp();
-  float humid = getHum();
-  Serial.println(temp);
+  int humid = round(getHum());
+  Serial.println(getDist());
+  Serial.println(humid);
 
   // "Physcial" Things We Do
   moveWindow(temp,humid);
+  delay(1000);
 }
 
 float getTemp() {
@@ -84,12 +84,12 @@ float getDist() {
 void moveWindow(float t, float h) {
   if (t > 28.0 || h > 50.0) { // Close the Window
     if (getDist() > winThresh) { // Window too far come back 
-      Serial.println("Too Far!");
+      //Serial.println("Too Far!");
       myStepper.step(256);
     }
   } else { // Open the Window
       if (getDist() < winThresh) { // Window too close go away 
-        Serial.println("Too Close!");
+        //Serial.println("Too Close!");
         myStepper.step(256);
       }
   }
