@@ -2,7 +2,7 @@
 #include <DHT.h>
 #include <LiquidCrystal.h>
 #include <Stepper.h>
-#include <WiFiS3.h> // http://10.103.201.189/
+#include <WiFiS3.h>  // http://10.103.201.189/
 
 #define DHTPIN 11
 
@@ -10,7 +10,7 @@
 const int trigPin = 6;
 const int echoPin = 5;
 
-const float winThresh = 10.0; // How dar the window is when fully closed
+const float winThresh = 10.0;  // How dar the window is when fully closed
 
 long duration;
 
@@ -31,7 +31,7 @@ bool open = false;
 
 //WiFi Constants
 const char ssid[] = "AirPennNet-Device";
-const char pass[] = "penn1740wifi"; 
+const char pass[] = "penn1740wifi";
 
 int status = WL_IDLE_STATUS;
 
@@ -56,7 +56,7 @@ void loop() {
   Serial.println(humid);
 
   // "Physcial" Things We Do
-  moveWindow(temp,humid);
+  moveWindow(temp, humid);
   delay(1000);
 }
 
@@ -69,7 +69,7 @@ float getHum() {
 }
 
 float getDist() {
-    // Use ping sensor
+  // Use ping sensor
   digitalWrite(trigPin, LOW);
   delayMicroseconds(2);
   digitalWrite(trigPin, HIGH);
@@ -78,19 +78,19 @@ float getDist() {
 
   // Distance Readings
   duration = pulseIn(echoPin, HIGH);
-  return duration*0.034/2; // Returns in cm
+  return duration * 0.034 / 2;  // Returns in cm
 }
 
 void moveWindow(float t, float h) {
-  if (t > 28.0 || h > 50.0) { // Close the Window
-    if (getDist() > winThresh) { // Window too far come back 
+  if (t > 28.0 || h > 50.0) {     // Close the Window
+    if (getDist() > winThresh) {  // Window too far come back
       //Serial.println("Too Far!");
       myStepper.step(256);
     }
-  } else { // Open the Window
-      if (getDist() < winThresh) { // Window too close go away 
-        //Serial.println("Too Close!");
-        myStepper.step(256);
-      }
+  } else {                        // Open the Window
+    if (getDist() < winThresh) {  // Window too close go away
+      //Serial.println("Too Close!");
+      myStepper.step(256);
+    }
   }
 }

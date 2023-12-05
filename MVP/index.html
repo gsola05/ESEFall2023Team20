@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="description" content = "ESE Team 20 has made WindowPal - An automatical window control system">
+        <meta name="viewport" content="width=device-width, intial-scale=1.0">
+        <meta http-equiv="refresh" content="3">
+        <title>ESE Team 20 - WindowPal</title>
+        <script src = "backend.js"></script>
+        <style>
+            .split {
+                height: 100%;
+                width: 50%;
+                position: fixed;
+                z-index: 1;
+                top: 0;
+                overflow-x: hidden;
+                padding-top: 20px;
+            }
+
+            .left {
+                left: 0;
+            }
+
+            .right {
+                right: 0;
+            }
+
+            .centered {
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                text-align: center;
+            }
+        </style>
+    </head>
+    <body>
+        <div id = "sample"></div>
+
+        <script>
+            var socket = io();
+
+            socket.on("data", function(data) {
+                console.log(data);
+
+                document.getElementById("sample").innerHTML = data;
+            });
+        </script>
+
+    </body>
+</html>
