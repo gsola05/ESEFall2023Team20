@@ -1,6 +1,6 @@
 #include <AccelStepper.h>
 #include <DHT.h>
-#include <WiFiS3.h> // 10.103.207.4
+#include <WiFiS3.h> // 10.103.201.33
 #include "index.h"
 
 #define DHTPIN 11
